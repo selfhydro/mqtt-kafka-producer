@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	kafkaConn = "localhost:9092"
+	kafkaConn = "kafka:9092"
 	topic     = "sensor.temperature"
 )
 
@@ -31,7 +31,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	opts := mqtt.NewClientOptions().AddBroker("localhost:1883").SetClientID("mqtt-kafka-producer")
+	opts := mqtt.NewClientOptions().AddBroker("mqtt-broker:1883").SetClientID("mqtt-kafka-producer")
 	c := mqtt.NewClient(opts)
 	if token := c.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
