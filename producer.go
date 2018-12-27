@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"log"
 	"os"
@@ -42,13 +41,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	reader := bufio.NewReader(os.Stdin)
 	for {
-		fmt.Print("Enter msg: ")
-		msg, _ := reader.ReadString('\n')
-
-		publish(msg, producer)
-
 		// publish with go routene
 		// go publish(msg, producer)
 	}
