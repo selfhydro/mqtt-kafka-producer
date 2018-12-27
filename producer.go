@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"os"
@@ -14,14 +15,28 @@ const (
 )
 
 func main() {
+	producer, err := initProducer()
+	if err != nil {
+		fmt.Println("Error producer: ", err.Error())
+		os.Exit(1)
+	}
+
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Print("Enter msg: ")
+		msg, _ := reader.ReadString('\n')
+
+		publish(msg, producer)
+
+		// publish with go routene
+		// go publish(msg, producer)
+	}
 
 }
 
 func initProducer() (sarama.SyncProducer, error) {
-	// setup sarama log to stdout
 	sarama.Logger = log.New(os.Stdout, "", log.Ltime)
 
-	// producer config
 	config := sarama.NewConfig()
 	config.Producer.Retry.Max = 5
 	config.Producer.RequiredAcks = sarama.WaitForAll
@@ -36,7 +51,6 @@ func initProducer() (sarama.SyncProducer, error) {
 }
 
 func publish(message string, producer sarama.SyncProducer) {
-	// publish sync
 	msg := &sarama.ProducerMessage{
 		Topic: topic,
 		Value: sarama.StringEncoder(message),
